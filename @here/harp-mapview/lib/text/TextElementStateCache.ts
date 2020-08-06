@@ -64,7 +64,8 @@ function findDuplicateById(
     if (duplicateIndex === -1) {
         return -1;
     }
-    const candidate = candidates[duplicateIndex].element;
+    const candidateElement = candidates[duplicateIndex];
+    const candidate = candidateElement.element;
     assert(element.featureId === candidate.featureId);
 
     if (candidate.text !== element.text) {
@@ -76,6 +77,15 @@ function findDuplicateById(
             `Text feature id ${element.featureId} collision between "${element.text} and \
              ${candidate.text}`
         );
+        return undefined;
+    }
+
+    if (
+        elementState.iconRenderStates !== undefined &&
+        candidateElement.iconRenderStates !== undefined &&
+        elementState.iconRenderStates.length !== candidateElement.iconRenderStates.length
+    ) {
+        // Cached line marker element needs the same number of icons to fit.
         return undefined;
     }
     return duplicateIndex;
@@ -153,6 +163,16 @@ function findDuplicateByText(
             // Cached text element is too far away to be a duplicate.
             continue;
         }
+
+        if (
+            elementState.iconRenderStates !== undefined &&
+            candidateEntry.iconRenderStates !== undefined &&
+            elementState.iconRenderStates.length !== candidateEntry.iconRenderStates.length
+        ) {
+            // Cached line marker element needs the same number of icons to fit.
+            continue;
+        }
+
         if (
             duplicate === undefined ||
             isBetterDuplicate(cachedElement, distSquared, duplicate, dupDistSquared)
