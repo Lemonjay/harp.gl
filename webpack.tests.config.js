@@ -73,36 +73,38 @@ const browserTestsConfig = {
             // default NODE_ENV to development. Override by setting the environment variable NODE_ENV to 'production'
             NODE_ENV: process.env.NODE_ENV || "development"
         }),
-        new CopyWebpackPlugin([
-            path.join(__dirname, "test/index.html"),
-            path.join(__dirname, "test/rendering.html"),
-            path.join(__dirname, "test/performance.html"),
-            require.resolve("three/build/three.min.js"),
-            require.resolve("mocha/mocha.js"),
-            require.resolve("mocha/mocha.css"),
-            require.resolve("mocha-webdriver-runner/dist/mocha-webdriver-client.js"),
-            ...testResources,
-            path.join(harpMapThemePath, "resources/berlin*.json"),
-            {
-                from: path.join(harpMapThemePath, "resources/wests_textures"),
-                to: "resources/wests_textures",
-                toType: "dir"
-            },
-            {
-                from: path.join(harpDataSourceProtocolPath, "theme.schema.json"),
-                to: "./@here/harp-datasource-protocol",
-                toType: "dir"
-            },
-            {
-                from: path.join(harpFontResourcesPath, "resources"),
-                to: "@here/harp-fontcatalog/resources"
-            },
-            {
-                from: "./test/resources/",
-                to: "dist/resources",
-                toType: "dir"
-            }
-        ])
+        new CopyWebpackPlugin({
+            patterns: [
+                path.join(__dirname, "test/index.html"),
+                path.join(__dirname, "test/rendering.html"),
+                path.join(__dirname, "test/performance.html"),
+                require.resolve("three/build/three.min.js"),
+                require.resolve("mocha/mocha.js"),
+                require.resolve("mocha/mocha.css"),
+                require.resolve("mocha-webdriver-runner/dist/mocha-webdriver-client.js"),
+                ...testResources,
+                path.join(harpMapThemePath, "resources/berlin*.json"),
+                {
+                    from: path.join(harpMapThemePath, "resources/wests_textures"),
+                    to: "resources/wests_textures",
+                    toType: "dir"
+                },
+                {
+                    from: path.join(harpDataSourceProtocolPath, "theme.schema.json"),
+                    to: "./@here/harp-datasource-protocol",
+                    toType: "dir"
+                },
+                {
+                    from: path.join(harpFontResourcesPath, "resources"),
+                    to: "@here/harp-fontcatalog/resources"
+                },
+                {
+                    from: "./test/resources/",
+                    to: "dist/resources",
+                    toType: "dir"
+                }
+            ]
+        })
     ],
     externals: [
         {

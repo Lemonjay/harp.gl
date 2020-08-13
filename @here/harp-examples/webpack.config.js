@@ -243,6 +243,7 @@ const assets = [
         to: "harp-decoders.js"
     }
 ].filter(asset => {
+    // ignore stuff that is not found
     if (asset === undefined || asset === null) {
         return false;
     } else if (typeof asset === "string") {
@@ -250,11 +251,18 @@ const assets = [
     } else if (typeof asset === "object") {
         return asset.from;
     }
-}); // ignore stuff that is not found
+});
 
-browserConfig.plugins.push(
-    // @ts-ignore
-    new CopyWebpackPlugin(assets, { ignore: ["*.npmignore", "*.gitignore"] })
-);
+assets.forEach(asset => {
+    if (typeof asset === "object") {
+        asset.globOptions = {
+            dot: true,
+            ignore: [".npmignore", ".gitignore"]
+        };
+    }
+});
+
+// @ts-ignore
+browserConfig.plugins.push(new CopyWebpackPlugin({ patterns: assets }));
 
 module.exports = [decoderConfig, browserConfig, codeBrowserConfig, exampleBrowserConfig];
