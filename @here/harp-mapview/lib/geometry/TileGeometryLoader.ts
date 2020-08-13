@@ -278,7 +278,9 @@ export class TileGeometryLoader {
             execute: this.prepare.bind(this, enabledKinds, disabledKinds),
             group: TileTaskGroups.CREATE,
             getPriority: this.getPriority.bind(this),
-            isExpired: this.discardNeedlessTile.bind(this, this.tile),
+            isExpired: () => {
+                return !this.tile.isVisible || this.tile.dataSource.isDetached();
+            },
             estimatedProcessTime: () => {
                 //TODO: this seems to be close in many cases, but take some measures to confirm
                 return (this.tile.decodedTile?.decodeTime || 30) / 6;
